@@ -1,0 +1,10 @@
+C:\Users\iantr\source\repos\3D experiment\3D experiment\bin\Debug\3D experiment.exe.config
+C:\Users\iantr\source\repos\3D experiment\3D experiment\bin\Debug\3D experiment.exe
+C:\Users\iantr\source\repos\3D experiment\3D experiment\bin\Debug\3D experiment.pdb
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\3D experiment.csprojAssemblyReference.cache
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\_3D_experiment.Form1.resources
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\_3D_experiment.Properties.Resources.resources
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\3D experiment.csproj.GenerateResource.cache
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\3D experiment.csproj.CoreCompileInputs.cache
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\3D experiment.exe
+C:\Users\iantr\source\repos\3D experiment\3D experiment\obj\Debug\3D experiment.pdb
