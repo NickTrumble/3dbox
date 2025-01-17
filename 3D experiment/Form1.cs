@@ -12,10 +12,11 @@ namespace _3D_experiment
 {
     public partial class Form1 : Form
     {
-        public ENVIRONMENT Env = new ENVIRONMENT(20);
+        public ENVIRONMENT Env = new ENVIRONMENT(20, new THREEVector(5, 5, 10));
         public CUBE Cube = new CUBE(new THREEVector(0, 0, 5));
         public CUBE Selected;
         public Point Center;
+        public float Speed = 0;
         public Form1()
         {
             Env.Cubes.Add(Cube);
@@ -67,19 +68,19 @@ namespace _3D_experiment
                 
                 Brush B = new SolidBrush(Color.Black);
                 //FRONT SIDE
-                e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[0]),
+                e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[0]),
                     DepthCorrector(Obj.Vertex[1]), DepthCorrector(Obj.Vertex[2]) });
-                e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[1]),
+                e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[1]),
                     DepthCorrector(Obj.Vertex[2]), DepthCorrector(Obj.Vertex[3]) });
 
 
-                if (Obj.Centre.Y < 0)//TOP SIDE     
+                if (Obj.Centre.Y <= -1)//TOP SIDE     
                 {
                     B = new SolidBrush(Color.DarkGray);
 
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[2]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[2]),
                     DepthCorrector(Obj.Vertex[3]), DepthCorrector(Obj.Vertex[6]) });
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[6]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[6]),
                     DepthCorrector(Obj.Vertex[7]), DepthCorrector(Obj.Vertex[3]) });
                 }
 
@@ -87,9 +88,9 @@ namespace _3D_experiment
                 {
                     B = new SolidBrush(Color.Gray);
 
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[1]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[1]),
                     DepthCorrector(Obj.Vertex[3]), DepthCorrector(Obj.Vertex[5]) });
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[3]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[3]),
                     DepthCorrector(Obj.Vertex[5]), DepthCorrector(Obj.Vertex[7]) });
                 }
 
@@ -97,19 +98,19 @@ namespace _3D_experiment
                 {
                     B = new SolidBrush(Color.Gray);
 
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[0]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[0]),
                     DepthCorrector(Obj.Vertex[2]), DepthCorrector(Obj.Vertex[4]) });
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[2]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[2]),
                     DepthCorrector(Obj.Vertex[4]), DepthCorrector(Obj.Vertex[6]) });
                 }
 
-                if (Obj.Centre.Y > 0)//BOTTOM SIDE     
+                if (Obj.Centre.Y >= 1)//BOTTOM SIDE     
                 {
                     B = new SolidBrush(Color.DarkGray);
 
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[0]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[0]),
                     DepthCorrector(Obj.Vertex[1]), DepthCorrector(Obj.Vertex[4]) });
-                    e.Graphics.FillPolygon(B, new Point[3] { DepthCorrector(Obj.Vertex[1]),
+                    e.Graphics.FillPolygon(B, new PointF[3] { DepthCorrector(Obj.Vertex[1]),
                     DepthCorrector(Obj.Vertex[4]), DepthCorrector(Obj.Vertex[5]) });
                 }
             }
@@ -117,36 +118,42 @@ namespace _3D_experiment
 
             using (Pen p = new Pen(Color.Green, 2))
             {
-                if (Selected.Centre.Y > 0)//BOTTOM
+                if (Selected.Centre.Y >= 1)//BOTTOM
                 {
-                    e.Graphics.DrawPolygon(p, new Point[4] {
+                    e.Graphics.DrawPolygon(p, new PointF[4] {
                             DepthCorrector(Selected.Vertex[0]), DepthCorrector(Selected.Vertex[1]),
                             DepthCorrector(Selected.Vertex[5]), DepthCorrector(Selected.Vertex[4])
                         });
+                    
                 }
-                else if (Selected.Centre.Y < 0)//TOP
+                else if (Selected.Centre.Y <= -1)//TOP
                 {
-                    e.Graphics.DrawPolygon(p, new Point[4] {
+                    e.Graphics.DrawPolygon(p, new PointF[4] {
                             DepthCorrector(Selected.Vertex[2]), DepthCorrector(Selected.Vertex[6]),
                             DepthCorrector(Selected.Vertex[7]), DepthCorrector(Selected.Vertex[3])
                         });
+
+                    if (DepthCorrector(Selected.Vertex[0]).Y > 2f * Center.Y)
+                    {
+                        float g = Selected.Centre.Z;
+                    }
                 }
 
                 if (Selected.Centre.X < 0)//RIGHT
                 {
-                    e.Graphics.DrawPolygon(p, new Point[4] {
+                    e.Graphics.DrawPolygon(p, new PointF[4] {
                             DepthCorrector(Selected.Vertex[1]), DepthCorrector(Selected.Vertex[3]),
                             DepthCorrector(Selected.Vertex[7]), DepthCorrector(Selected.Vertex[5])
                         });
                 }
                 else if (Selected.Centre.X > 0)//LEFT
                 {
-                    e.Graphics.DrawPolygon(p, new Point[4] {
+                    e.Graphics.DrawPolygon(p, new PointF[4] {
                             DepthCorrector(Selected.Vertex[0]), DepthCorrector(Selected.Vertex[4]),
                             DepthCorrector(Selected.Vertex[6]), DepthCorrector(Selected.Vertex[2])
                         });
                 }
-                e.Graphics.DrawPolygon(p, new Point[4] {//FRONT
+                e.Graphics.DrawPolygon(p, new PointF[4] {//FRONT
                             DepthCorrector(Selected.Vertex[0]), DepthCorrector(Selected.Vertex[2]),
                             DepthCorrector(Selected.Vertex[3]), DepthCorrector(Selected.Vertex[1])
                         });
@@ -155,15 +162,15 @@ namespace _3D_experiment
             
         }
 
-        public Point DepthCorrector(THREEVector v)
+        public PointF DepthCorrector(THREEVector v)
         {
 
-            double scale = 200.0 / Math.Sqrt(v.Z);
+            float scale = 150f / v.Z;
 
-            int ProjectedX = (int)(v.X * scale);
-            int ProjectedY = (int)(v.Y * scale);
+            float ProjectedX = v.X * scale;
+            float ProjectedY = v.Y * scale;
 
-            return new Point(Center.X - ProjectedX, Center.Y - ProjectedY);
+            return new PointF(Center.X - ProjectedX, Center.Y - ProjectedY);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -178,7 +185,7 @@ namespace _3D_experiment
                 //FIND CUBE
                 foreach(var box in Env.Cubes)
                 {
-                    Point BoxCenter = DepthCorrector(box.Centre);
+                    PointF BoxCenter = DepthCorrector(box.Centre);
                     if (Math.Abs(e.X - BoxCenter.X) < 50 && Math.Abs(e.Y - BoxCenter.Y) < 50)
                     {
                         Selected = box;
@@ -189,6 +196,18 @@ namespace _3D_experiment
                     
                 }
             }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                if (timer1.Enabled)
+                {
+                    timer1.Stop();
+                }
+                else
+                {
+                    Speed = 0;
+                    timer1.Start();
+                }
+            }
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -197,13 +216,25 @@ namespace _3D_experiment
             pictureBox1.Size = this.Size;
             pictureBox1.Invalidate();
         }
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Speed += 0.01f;
+            for(int i = 0; i < Selected.Vertex.Count; i++)
+            {
+                Selected.MOVE(new THREEVector(0, -Speed, 0));
+            }
+            
+            pictureBox1.Invalidate();
+        }
     }
 
     public class THREEVector//3-DIMENSIONAL VECTOR
     {
-        public int X;//LEFT + RIGHT
-        public int Y;//UP + DOWN
-        public int Z;//BACK + FORTH
+        public float X;//LEFT + RIGHT
+        public float Y;//UP + DOWN
+        public float Z;//BACK + FORTH
 
         public static THREEVector LEFT = new THREEVector(-1, 0, 0);
         public static THREEVector RIGHT = new THREEVector(1, 0, 0);
@@ -212,7 +243,7 @@ namespace _3D_experiment
         public static THREEVector FORWARDS = new THREEVector(0, 0, 1);
         public static THREEVector BACKWARDS = new THREEVector(0, 0, -1);
 
-        public THREEVector(int x, int y, int z)
+        public THREEVector(float x, float y, float z)
         {
             X = x;
             Y = y;
@@ -222,20 +253,40 @@ namespace _3D_experiment
         public static THREEVector operator +(THREEVector a, THREEVector b)
         {
             return new THREEVector(
-                a.X + b.X,
-                a.Y + b.Y,
-                Math.Max(a.Z + b.Z, 1)
+                Math.Min(ENVIRONMENT.Bounds.X, Math.Max(a.X + b.X, -ENVIRONMENT.Bounds.X)),
+                Math.Min(ENVIRONMENT.Bounds.Y, Math.Max(a.Y + b.Y, -ENVIRONMENT.Bounds.Y)),
+                Math.Min(ENVIRONMENT.Bounds.Z, Math.Max(a.Z + b.Z, 1))
                 );
         }
 
-        public static THREEVector operator -(THREEVector a, THREEVector b)
+        public static THREEVector operator /(THREEVector a, THREEVector b)
         {
             return new THREEVector(
-                a.X - b.X,
-                a.Y - b.Y,
-                a.Z - b.Z
+                a.X + b.X,
+                a.Y + b.Y,
+                a.Z + b.Z
                 );
         }
+
+        public static THREEVector operator *(THREEVector a, float b)
+        {
+            return new THREEVector(
+                Math.Min(ENVIRONMENT.Bounds.X, Math.Max(a.X * b, 1)),
+                Math.Min(ENVIRONMENT.Bounds.Y, Math.Max(a.Y * b, 1)),
+                Math.Min(ENVIRONMENT.Bounds.Z, Math.Max(a.Z * b, 1))
+                );
+        }
+
+        public static bool operator ==(THREEVector a, THREEVector b)
+        {
+            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+        }
+        public static bool operator !=(THREEVector a, THREEVector b)
+        {
+            return a.X != b.X || a.Y != b.Y || a.Z != b.Z;
+        }
+
+
     }
 
     public class CUBE
@@ -263,6 +314,14 @@ namespace _3D_experiment
 
         public void MOVE(THREEVector a)
         {
+            
+            for (int i = 0; i < Vertex.Count; i++)
+            {
+                if ((Vertex[i] + a) != (Vertex[i] / a))
+                {
+                    return;
+                }
+            }
             Centre += a;
             for (int i = 0; i < Vertex.Count; i++)
             {
@@ -281,10 +340,12 @@ namespace _3D_experiment
     {
         public List<CUBE> Cubes = new List<CUBE>();
         public int Tile;
+        public static THREEVector Bounds;
         
-        public ENVIRONMENT(int tile)
+        public ENVIRONMENT(int tile, THREEVector boundaries)
         {
             Tile = tile;
+            Bounds = boundaries;
         }
     }
 }
